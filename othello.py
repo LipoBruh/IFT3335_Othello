@@ -170,7 +170,7 @@ def minimax_ai2(board, player):
 
 
 
-def play():
+def play(algo):
         team_name = "sus"
         student_id = '91021'
         try:
@@ -187,7 +187,7 @@ def play():
                         continue
 
                     # AI joue
-                    current_ai = user_ai1 if game.current_player == BLACK else minimax_ai
+                    current_ai = algo if game.current_player == BLACK else minimax_ai
                     move = current_ai(game.board, game.current_player)
 
                     if move:
@@ -228,7 +228,7 @@ def play():
 
         except Exception as e: #modified to include error line number
             tb = traceback.extract_tb(e.__traceback__)
-            filename, lineno, func, text = tb[-1] 
+            filename, lineno, func, text = tb[-1] #deconstruction
             st.error(f"❌ Erreur dans votre code (ligne {lineno} de {filename}): {e}")
 
 
@@ -278,8 +278,15 @@ st.title("🏆 Othello - Compétition TP1 ift3335 !")
 
 st.title("Compétition entre IA !")
 
-if st.button("Lancer la partie avec AI du projet"):
-    play()
+
+#TODO : changer la reference a la fx lorsque completee
+if st.button("Minimax Custom VS AI"):
+    play(minimax_ai)
+if st.button("Alpha beta VS AI"):
+    play(minimax_ai)
+if st.button("Monte Carlo VS AI"):
+    play(minimax_ai)
+
 
 # Formulaire pour entrer l'ID étudiant
 student_id = st.text_input("Entrez votre ID étudiant")

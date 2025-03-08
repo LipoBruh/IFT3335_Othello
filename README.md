@@ -36,8 +36,8 @@ In your VSCode CLI, in the project directory, enter the following command (the p
 
 Then, simply access `http://localhost:8501/` in your **browser** if it did not automatically open.
 
-#### Modifications done to the streamlit app
-Nous avons ajoute un bouton dans l'interface qui charge les algorithmes definis dans ce projet, ce qui 
+#### Modifications done to the streamlit app (othello.py)
+Nous avons ajoute un bouton dans l'interface qui charge les algorithmes definis dans ce projet, ce qui evite l'utilisation du formulaire et accelere le developement. Le bouton invoque `play()` qui charge automatiquement le contenu et ajoute des lignes additionnelles dans le try catch pour debugger (ajoute la source et la ligne ayant cree l'erreur).
 
 
 
