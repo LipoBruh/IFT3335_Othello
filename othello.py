@@ -112,10 +112,14 @@ class Othello:
     def is_game_over(self):
         return not self.get_valid_moves(BLACK) and not self.get_valid_moves(WHITE)
 
+
+
 # Minimax AI
 def evaluate_board(board):
     """Basic evaluation function: counts the number of pieces per player."""
     return np.sum(board == WHITE) - np.sum(board == BLACK)
+
+
 
 def minimax(board, depth, maximizing, player):
     """Minimax AI with depth limit."""
@@ -178,7 +182,7 @@ def user_ai(board, player):
 # Définissez votre fonction IA 1 ici
 """
 def user_ai1(board, player):
-    minimax_ai(board,player)
+    minimax.minimax2(board,player)
 
 """\
 # Définissez votre fonction IA 2 ici    
@@ -189,6 +193,10 @@ def user_ai2(board, player):
 ia_placeholder = minimax_ai
 ia1_placeholder = user_ai1
 ia2_placeholder = user_ai2 
+
+
+
+
 
 # Interface Streamlit
 st.title("🏆 Othello - Compétition TP1 ift3335 !")
