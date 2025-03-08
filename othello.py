@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import time  # Import pour ajouter un délai entre les coups
+#
+#My imports
+import minimax
 
 # Définition des constantes
 EMPTY = 0
@@ -151,25 +154,41 @@ def minimax_ai(board, player):
     _, best_move = minimax(board, DEPTH, True, player)
     return best_move
 
+
+def minimax_ai2(board, player):
+    """AI wrapper for Minimax with depth=3"""
+    _, best_move = minimax(board, 6, True, player)
+    return best_move
+
+
+
+
+
+
+
+
 # Structure d'une IA pour Othello (sans implémentation)
-ia_placeholder = """\
+"""\
 # Définissez votre fonction IA ici
+"""
 def user_ai(board, player):
-    
-"""
+    minimax_ai(board,player)
 
-ia1_placeholder = """\
+"""\
 # Définissez votre fonction IA 1 ici
+"""
 def user_ai1(board, player):
-    
-"""
+    minimax_ai(board,player)
 
-ia2_placeholder = """\
-# Définissez votre fonction IA 2 ici
+"""\
+# Définissez votre fonction IA 2 ici    
+"""
 def user_ai2(board, player):
-    
-"""
+    minimax_ai(board,player)
 
+ia_placeholder = minimax_ai
+ia1_placeholder = user_ai1
+ia2_placeholder = user_ai2 
 
 # Interface Streamlit
 st.title("🏆 Othello - Compétition TP1 ift3335 !")
