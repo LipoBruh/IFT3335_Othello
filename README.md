@@ -36,6 +36,9 @@ In your VSCode CLI, in the project directory, enter the following command (the p
 
 Then, simply access `http://localhost:8501/` in your **browser** if it did not automatically open.
 
+#### Modifications done to the streamlit app
+Nous avons ajoute un bouton dans l'interface qui charge les algorithmes definis dans ce projet, ce qui 
+
 
 
 

@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import time  # Import pour ajouter un délai entre les coups
+import traceback
 #
 #My imports
-import minimax
+from minimax import *
 
 # Définition des constantes
 EMPTY = 0
@@ -160,9 +161,76 @@ def minimax_ai(board, player):
 
 
 def minimax_ai2(board, player):
-    """AI wrapper for Minimax with depth=3"""
-    _, best_move = minimax(board, 6, True, player)
+    """AI wrapper for Minimax with depth=6"""
+    _, best_move = minimax2(board, 6, True, player)
     return best_move
+
+
+
+
+
+
+def play():
+        team_name = "sus"
+        student_id = '91021'
+        try:
+                game = Othello()
+
+                # Préparer une seule figure pour tout le jeu
+                fig, ax = plt.subplots(figsize=(8, 8))
+                plot_placeholder = st.empty()  # Réserve l'espace pour la figure
+
+                while not game.is_game_over():
+                    valid_moves = game.get_valid_moves(game.current_player)
+                    if not valid_moves:
+                        game.current_player = -game.current_player
+                        continue
+
+                    # AI joue
+                    current_ai = user_ai1 if game.current_player == BLACK else minimax_ai
+                    move = current_ai(game.board, game.current_player)
+
+                    if move:
+                        game.apply_move(move, game.current_player)
+
+                    # Mettre à jour le plateau dans la même figure
+                    ax.clear()
+                    ax.set_facecolor("#006400")  
+                    
+                    for x in range(9):
+                        ax.plot([x-0.5, x-0.5], [-0.5, 7.5], color='black', linewidth=2)
+                        ax.plot([-0.5, 7.5], [x-0.5, x-0.5], color='black', linewidth=2)
+                    
+                    for row in range(8):
+                        for col in range(8):
+                            if game.board[row, col] == BLACK:
+                                ax.add_patch(plt.Circle((col, row), 0.4, color='black', zorder=2))
+                            elif game.board[row, col] == WHITE:
+                                ax.add_patch(plt.Circle((col, row), 0.4, color='white', zorder=2, edgecolor="black", linewidth=2))
+                    
+                    ax.set_xticks([])
+                    ax.set_yticks([])
+                    ax.set_xlim(-0.5, 7.5)
+                    ax.set_ylim(7.5, -0.5)
+
+                    plot_placeholder.pyplot(fig)  # Met à jour dans la même figure
+                    time.sleep(1)  # Pause d'une seconde entre chaque coup
+
+                    game.current_player = -game.current_player
+
+                st.write(f"🎉 Partie terminée pour l'équipe {team_name} et l' ID {student_id} !")
+
+                final_score = np.sum(game.board == BLACK) - np.sum(game.board == WHITE)
+                st.write(f"Votre score : {final_score}")
+
+                # Mise à jour du leaderboard
+                update_leaderboard(student_id, team_name, final_score)
+
+        except Exception as e: #modified to include error line number
+            tb = traceback.extract_tb(e.__traceback__)
+            filename, lineno, func, text = tb[-1] 
+            st.error(f"❌ Erreur dans votre code (ligne {lineno} de {filename}): {e}")
+
 
 
 
@@ -172,23 +240,30 @@ def minimax_ai2(board, player):
 
 
 # Structure d'une IA pour Othello (sans implémentation)
-"""\
-# Définissez votre fonction IA ici
-"""
+
 def user_ai(board, player):
     minimax_ai(board,player)
 
-"""\
-# Définissez votre fonction IA 1 ici
-"""
-def user_ai1(board, player):
-    minimax.minimax2(board,player)
 
-"""\
-# Définissez votre fonction IA 2 ici    
-"""
+def user_ai1(board, player):
+    minimax_ai2(board,player)
+
+
 def user_ai2(board, player):
     minimax_ai(board,player)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ia_placeholder = minimax_ai
 ia1_placeholder = user_ai1
@@ -203,6 +278,9 @@ st.title("🏆 Othello - Compétition TP1 ift3335 !")
 
 st.title("Compétition entre IA !")
 
+if st.button("Lancer la partie avec AI du projet"):
+    play()
+
 # Formulaire pour entrer l'ID étudiant
 student_id = st.text_input("Entrez votre ID étudiant")
 team_name = st.text_input("Entrez le nom de votre équipe")
@@ -211,6 +289,9 @@ st.write("Soumettez votre propre IA sous forme de fonction Python.")
 
 # Champ de soumission de code
 user_code = st.text_area("Entrez votre code Python ici :", height=200, placeholder= ia_placeholder)
+
+
+
 
 if student_id and team_name and user_code:
     try:
@@ -373,3 +454,4 @@ if id_ia1 and id_ia2 and code_ia1 and code_ia2:
 
     except Exception as e:
         st.error(f"❌ Erreur dans les codes soumis : {e}")
+
