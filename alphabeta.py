@@ -1,5 +1,6 @@
 import othello
 import numpy as np
+from minimax import GAMETIME, PONDERATION1,PONDERATION2,PONDERATION3
 
 EMPTY = 0
 BLACK = 1
@@ -16,12 +17,6 @@ WEIGHTS = [
     [-150,-250, 0, 0, 0, 0,-250,-150],
     [ 500,-150,30,10,10,30,-150, 500],
 ] #From Tp specification
-
-GAMETIME = 1
-
-PONDERATION1 = 6 if GAMETIME>20 else 3
-PONDERATION2 = 0 if GAMETIME>20 else 1
-PONDERATION3 = 9 if GAMETIME>20 else 6
 
 
 
@@ -61,7 +56,7 @@ def update_constants():
 
 
 
-def minimax2(board, depth, maximizing, player):
+def alphabeta_ai(board, depth, maximizing, player,alpha,beta):
     global GAMETIME
     """Minimax AI with depth limit."""
     game = othello.Othello()
@@ -87,15 +82,21 @@ def minimax2(board, depth, maximizing, player):
             game.apply_move(move, player)
             #Score is more than just the difference in progress
             #if the move is done in a square that has a good weight for the gameplay, the score is bonified, otherwise it is penalized
-            eval_score, _ = minimax2(new_board, depth - 1, False, -player)
+            eval_score, _ = alphabeta_ai(new_board, depth - 1, False, -player,alpha,beta)
             eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             #
             if eval_score > max_eval:
                 max_eval = eval_score
                 best_move = move
-
-
+                alpha=max_eval
+            #
+            #Pruning if out of bounds
+            if eval_score < alpha:
+                return min_eval, best_move
+            if eval_score > beta:
+                return min_eval, best_move
+            #
         return max_eval, best_move
     else:
         min_eval = float("inf")
@@ -105,13 +106,20 @@ def minimax2(board, depth, maximizing, player):
 
             new_board = game.board.copy()
             game.apply_move(move, player)
-            eval_score, _ = minimax2(new_board, depth - 1, True, -player)
+            eval_score, _ = alphabeta_ai(new_board, depth - 1, True, -player,alpha,beta)
             eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
+            
             if eval_score < min_eval:
                 min_eval = eval_score
                 best_move = move
-
-
+                beta=min_eval
+            #
+            #Pruning if out of bounds
+            if eval_score < alpha:
+                return min_eval, best_move
+            if eval_score > beta:
+                return min_eval, best_move
+            #
         return min_eval, best_move
     

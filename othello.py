@@ -8,6 +8,7 @@ import traceback
 #
 #My imports
 from minimax import *
+from alphabeta import *
 
 # Définition des constantes
 EMPTY = 0
@@ -166,6 +167,11 @@ def minimax_ai2(board, player):
     update_time()
     return best_move
 
+def alphabeta_ai(board, player):
+    """AI wrapper for Minimax with depth=7"""
+    _, best_move = alphabeta_ai(board, 7, True, player,-10000,10000)
+    update_time()
+    return best_move
 
 
 
@@ -247,7 +253,7 @@ def user_ai(board, player):
 
 
 def user_ai1(board, player):
-    minimax_ai2(board,player)
+    alphabeta_ai(board,player)
 
 
 def user_ai2(board, player):

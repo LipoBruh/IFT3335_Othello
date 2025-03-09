@@ -87,6 +87,8 @@ PONDERATION3 = 9 if GAMETIME>20 else 6
 
 Avec cette nouvelle ponderation dynamique, notre algorithme accepte de laisser tomber les positions fortes en fin de partie et se concentre sur l'attaque. Notre score augmente a 56 (reste 4 pieces blanches) contre le minimax de base.
 
+Note : On prefere garder la profondeur / nombre de plis a 4 pour accelerer le jeu. Cela montre aussi l'impact des heuristiques contre un minimax sans heuristique a 4 plis.
+
 ### Autres heuristiques
 
 A completer si l'equipe decide d'adopter des heuristiques basees sur la documentation web.
