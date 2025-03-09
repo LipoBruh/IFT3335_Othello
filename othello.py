@@ -162,7 +162,7 @@ def minimax_ai(board, player):
 
 def minimax_ai2(board, player):
     """AI wrapper for Minimax with depth=6"""
-    _, best_move = minimax2(board, 6, True, player)
+    _, best_move = minimax2(board, 4, True, player)
     return best_move
 
 
@@ -214,7 +214,7 @@ def play(algo):
                     ax.set_ylim(7.5, -0.5)
 
                     plot_placeholder.pyplot(fig)  # Met à jour dans la même figure
-                    time.sleep(1)  # Pause d'une seconde entre chaque coup
+                    time.sleep(0.1)  # Pause d'une seconde entre chaque coup
 
                     game.current_player = -game.current_player
 
@@ -281,7 +281,7 @@ st.title("Compétition entre IA !")
 
 #TODO : changer la reference a la fx lorsque completee
 if st.button("Minimax Custom VS AI"):
-    play(minimax_ai)
+    play(minimax_ai2)
 if st.button("Alpha beta VS AI"):
     play(minimax_ai)
 if st.button("Monte Carlo VS AI"):

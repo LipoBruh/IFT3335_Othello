@@ -22,10 +22,13 @@ PONDERATION2 = 1
 PONDERATION3 = 1
 
 
+
+
+
 "HEURISTIQUES DE BASE DEMANDEES PAR LE TP POUR TASK 1"
 def evaluate_move(move): #Was previously the only criteria in evaluate_board
     (row, col) = move
-    return WEIGHTS[row,col]
+    return WEIGHTS[row][col]
 
 
 def evaluate_board(board): 
@@ -60,24 +63,34 @@ def minimax2(board, depth, maximizing, player):
 
     if maximizing:
         max_eval = float("-inf")
+
+
+
         for move in valid_moves:
             new_board = game.board.copy()
             game.apply_move(move, player)
             #Score is more than just the difference in progress
             #if the move is done in a square that has a good weight for the gameplay, the score is bonified, otherwise it is penalized
-            eval_score, _ = PONDERATION1*minimax2(new_board, depth - 1, False, -player) + PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(new_board,player)
+            eval_score, _ = PONDERATION1*minimax2(new_board, depth - 1, False, -player)
+            eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
+            #
             if eval_score > max_eval:
                 max_eval = eval_score
                 best_move = move
+
+
         return max_eval, best_move
     else:
         min_eval = float("inf")
         for move in valid_moves:
+
             new_board = game.board.copy()
             game.apply_move(move, player)
-            eval_score, _ = minimax2(new_board, depth - 1, True, -player)
+            eval_score, _ = PONDERATION1*minimax2(new_board, depth - 1, True, -player)
+            eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             if eval_score < min_eval:
                 min_eval = eval_score
                 best_move = move
+
         return min_eval, best_move
     
