@@ -163,6 +163,7 @@ def minimax_ai(board, player):
 def minimax_ai2(board, player):
     """AI wrapper for Minimax with depth=6"""
     _, best_move = minimax2(board, 4, True, player)
+    update_time()
     return best_move
 
 

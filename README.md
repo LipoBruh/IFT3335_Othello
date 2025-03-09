@@ -64,7 +64,24 @@ Avec depth a 5 et ponderation 1,1,1 : On a un score de 46 (reste 9 pieces blanch
 
 Avec depth a 4 et ponderation 1,1,1 : On a un score de 32 (reste 16 pieces blanches). Le jeu ne semble pas ralenti et la performance diminue un peu.
 
+Avec depth a 4 et ponderation 3,1,6 : On a un score de 42 (reste 11 pieces blanches). Changer ce ratio permet d'ameliorer certaines choses et d'amoindrir d'autres, il serait interessant de tester toutes les permutations et les stocker dans un log file (a faire si le temps le permet).
 
+Constatations : 
+- La valeur des coins est importante en debut de partie, mais importe peu en fin de partie. 
+- L'automate peut se coincer en fin de partie s'il favorise des actions blocantes, alors l'heuristique `evaluate_nb_positions` gagne en importance vers la fin de la partie
+- Les mouvements qui gagnent le plus de cases sont critiques pour maximiser une fin de partie.
+
+Amelioration suggeree : changer la ponderation en fonction de la progression du jeu.
+
+```python
+#On peut resumer la logique ainsi meme si un peu plus detaillee en code:
+gametime = 1
+PONDERATION1 = 6 if gametime>10 else 3
+PONDERATION2 = 0 if gametime>10 else 1
+PONDERATION3 = 9 if gametime>10 else 6
+```
+
+Avec cette nouvelle ponderation dynamique, notre algorithme accepte de laisser tomber les positions fortes en fin de partie et se concentre sur l'attaque. Notre score augmente a 56 (reste 4 pieces blanches).
 
 ## Tâche 2 : Alpha Beta
 

@@ -17,9 +17,11 @@ WEIGHTS = [
     [ 500,-150,30,10,10,30,-150, 500],
 ] #From Tp specification
 
-PONDERATION1 = 1
-PONDERATION2 = 1
-PONDERATION3 = 1
+GAMETIME = 1
+
+PONDERATION1 = 6 if GAMETIME>20 else 3
+PONDERATION2 = 0 if GAMETIME>20 else 1
+PONDERATION3 = 9 if GAMETIME>20 else 6
 
 
 
@@ -42,11 +44,25 @@ def evaluate_nb_positions(game,player):
 "HEURISTIQUES SUPPLEMENTAIRES POUR TASK 1"
 
 
+def update_time():
+    global GAMETIME 
+    GAMETIME += 1
+    print(GAMETIME)
+    print(f'{PONDERATION1},{PONDERATION2},{PONDERATION3}')
+    update_constants()
 
+def update_constants():
+    global PONDERATION1
+    global PONDERATION2 
+    global PONDERATION3   
+    PONDERATION1 = 6 if GAMETIME>20 else 3
+    PONDERATION2 = 0 if GAMETIME>20 else 1
+    PONDERATION3 = 9 if GAMETIME>20 else 6
 
 
 
 def minimax2(board, depth, maximizing, player):
+    global GAMETIME
     """Minimax AI with depth limit."""
     game = othello.Othello()
     game.board = board.copy()
@@ -63,7 +79,7 @@ def minimax2(board, depth, maximizing, player):
 
     if maximizing:
         max_eval = float("-inf")
-
+        
 
 
         for move in valid_moves:
@@ -71,7 +87,8 @@ def minimax2(board, depth, maximizing, player):
             game.apply_move(move, player)
             #Score is more than just the difference in progress
             #if the move is done in a square that has a good weight for the gameplay, the score is bonified, otherwise it is penalized
-            eval_score, _ = PONDERATION1*minimax2(new_board, depth - 1, False, -player)
+            eval_score, _ = minimax2(new_board, depth - 1, False, -player)
+            eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             #
             if eval_score > max_eval:
@@ -82,15 +99,19 @@ def minimax2(board, depth, maximizing, player):
         return max_eval, best_move
     else:
         min_eval = float("inf")
+
+
         for move in valid_moves:
 
             new_board = game.board.copy()
             game.apply_move(move, player)
-            eval_score, _ = PONDERATION1*minimax2(new_board, depth - 1, True, -player)
+            eval_score, _ = minimax2(new_board, depth - 1, True, -player)
+            eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             if eval_score < min_eval:
                 min_eval = eval_score
                 best_move = move
+
 
         return min_eval, best_move
     
