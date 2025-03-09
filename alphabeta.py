@@ -39,24 +39,9 @@ def evaluate_nb_positions(game,player):
 "HEURISTIQUES SUPPLEMENTAIRES POUR TASK 1"
 
 
-def update_time():
-    global GAMETIME 
-    GAMETIME += 1
-    print(GAMETIME)
-    print(f'{PONDERATION1},{PONDERATION2},{PONDERATION3}')
-    update_constants()
 
-def update_constants():
-    global PONDERATION1
-    global PONDERATION2 
-    global PONDERATION3   
-    PONDERATION1 = 6 if GAMETIME>20 else 3
-    PONDERATION2 = 0 if GAMETIME>20 else 1
-    PONDERATION3 = 9 if GAMETIME>20 else 6
-
-
-
-def alphabeta_ai(board, depth, maximizing, player,alpha,beta):
+def alphabeta(board, depth, maximizing, player,alpha,beta):
+    print('...')
     global GAMETIME
     """Minimax AI with depth limit."""
     game = othello.Othello()
@@ -82,7 +67,7 @@ def alphabeta_ai(board, depth, maximizing, player,alpha,beta):
             game.apply_move(move, player)
             #Score is more than just the difference in progress
             #if the move is done in a square that has a good weight for the gameplay, the score is bonified, otherwise it is penalized
-            eval_score, _ = alphabeta_ai(new_board, depth - 1, False, -player,alpha,beta)
+            eval_score, _ = alphabeta(new_board, depth - 1, False, -player,alpha,beta)
             eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             #
@@ -93,9 +78,9 @@ def alphabeta_ai(board, depth, maximizing, player,alpha,beta):
             #
             #Pruning if out of bounds
             if eval_score < alpha:
-                return min_eval, best_move
+                return max_eval, best_move
             if eval_score > beta:
-                return min_eval, best_move
+                return max_eval, best_move
             #
         return max_eval, best_move
     else:
@@ -106,7 +91,7 @@ def alphabeta_ai(board, depth, maximizing, player,alpha,beta):
 
             new_board = game.board.copy()
             game.apply_move(move, player)
-            eval_score, _ = alphabeta_ai(new_board, depth - 1, True, -player,alpha,beta)
+            eval_score, _ = alphabeta(new_board, depth - 1, True, -player,alpha,beta)
             eval_score*=PONDERATION1
             eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
             

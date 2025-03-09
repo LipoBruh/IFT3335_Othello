@@ -169,7 +169,7 @@ def minimax_ai2(board, player):
 
 def alphabeta_ai(board, player):
     """AI wrapper for Minimax with depth=7"""
-    _, best_move = alphabeta_ai(board, 7, True, player,-10000,10000)
+    _, best_move = alphabeta(board, 7, True, player,-10000,10000)
     update_time()
     return best_move
 
@@ -290,7 +290,7 @@ st.title("Compétition entre IA !")
 if st.button("Minimax Custom VS AI"):
     play(minimax_ai2)
 if st.button("Alpha beta VS AI"):
-    play(minimax_ai)
+    play(alphabeta_ai)
 if st.button("Monte Carlo VS AI"):
     play(minimax_ai)
 
