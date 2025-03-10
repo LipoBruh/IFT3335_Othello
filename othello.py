@@ -7,8 +7,10 @@ import time  # Import pour ajouter un délai entre les coups
 import traceback
 #
 #My imports
+from othello import *
 from minimax import *
 from alphabeta import *
+from montecarlo import*
 
 # Définition des constantes
 EMPTY = 0
