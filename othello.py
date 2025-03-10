@@ -171,8 +171,8 @@ def minimax_ai2(board, player):
 
 def alphabeta_ai(board, player):
     """AI wrapper for Minimax with depth=7"""
-    _, best_move = alphabeta(board, 7, True, player,-10000,10000)
-    update_time()
+    _, best_move = alphabeta(board, 6, True, player,-10000,10000)
+    update_time2()
     return best_move
 
 
