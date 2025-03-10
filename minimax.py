@@ -62,8 +62,7 @@ def update_constants():
 
 
 def minimax2(board, depth, maximizing, player):
-    global GAMETIME
-    """Minimax AI with depth limit."""
+    """Minimax AI with depth limit v2."""
     game = othello.Othello()
     game.board = board.copy()
 

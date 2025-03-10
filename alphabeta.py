@@ -1,6 +1,8 @@
+from minimax import GAMETIME
 import othello
 import numpy as np
-from minimax import GAMETIME, PONDERATION1,PONDERATION2,PONDERATION3
+
+
 
 EMPTY = 0
 BLACK = 1
@@ -18,8 +20,26 @@ WEIGHTS = [
     [ 500,-150,30,10,10,30,-150, 500],
 ] #From Tp specification
 
+PONDERATION11 = 6 if GAMETIME>20 else 3
+PONDERATION22 = 0 if GAMETIME>20 else 1
+PONDERATION33 = 9 if GAMETIME>20 else 6
 
 
+def update_time2():
+    global GAMETIME 
+    GAMETIME += 1
+    print(GAMETIME)
+    print(f'{PONDERATION11},{PONDERATION22},{PONDERATION33}')
+    update_constants2()
+
+def update_constants2():
+    global GAMETIME 
+    global PONDERATION11
+    global PONDERATION22
+    global PONDERATION33  
+    PONDERATION11 = 6 if GAMETIME>25 else 3
+    PONDERATION22 = 0 if GAMETIME>25 else 1
+    PONDERATION33 = 3 if GAMETIME>25 else 6
 
 
 "HEURISTIQUES DE BASE DEMANDEES PAR LE TP POUR TASK 1"
@@ -41,8 +61,6 @@ def evaluate_nb_positions(game,player):
 
 
 def alphabeta(board, depth, maximizing, player,alpha,beta):
-    print('...')
-    global GAMETIME
     """Minimax AI with depth limit."""
     game = othello.Othello()
     game.board = board.copy()
@@ -50,7 +68,7 @@ def alphabeta(board, depth, maximizing, player,alpha,beta):
 
 
     if depth == 0 or game.is_game_over():
-        return evaluate_board(game.board), None
+        return PONDERATION11*evaluate_board(game.board), None
 
 
 
@@ -68,20 +86,18 @@ def alphabeta(board, depth, maximizing, player,alpha,beta):
             #Score is more than just the difference in progress
             #if the move is done in a square that has a good weight for the gameplay, the score is bonified, otherwise it is penalized
             eval_score, _ = alphabeta(new_board, depth - 1, False, -player,alpha,beta)
-            eval_score*=PONDERATION1
-            eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
+            eval_score+=PONDERATION22*evaluate_move(move) + PONDERATION33*evaluate_nb_positions(game,player)
             #
             if eval_score > max_eval:
                 max_eval = eval_score
                 best_move = move
                 alpha=max_eval
             #
+            max_eval = max(max_eval, eval_score)
             #Pruning if out of bounds
-            if eval_score < alpha:
-                return max_eval, best_move
-            if eval_score > beta:
-                return max_eval, best_move
-            #
+            alpha = max(alpha, eval_score)
+            if beta <= alpha:
+                break
         return max_eval, best_move
     else:
         min_eval = float("inf")
@@ -91,20 +107,14 @@ def alphabeta(board, depth, maximizing, player,alpha,beta):
 
             new_board = game.board.copy()
             game.apply_move(move, player)
+            #
             eval_score, _ = alphabeta(new_board, depth - 1, True, -player,alpha,beta)
-            eval_score*=PONDERATION1
-            eval_score+= PONDERATION2*evaluate_move(move) + PONDERATION3*evaluate_nb_positions(game,player)
-            
-            if eval_score < min_eval:
-                min_eval = eval_score
-                best_move = move
-                beta=min_eval
+            eval_score+=PONDERATION22*evaluate_move(move) + PONDERATION33*evaluate_nb_positions(game,player)
             #
+            min_eval = min(min_eval, eval_score)
             #Pruning if out of bounds
-            if eval_score < alpha:
-                return min_eval, best_move
-            if eval_score > beta:
-                return min_eval, best_move
-            #
+            beta = min(beta, eval_score)
+            if beta <= alpha:
+                break 
         return min_eval, best_move
     

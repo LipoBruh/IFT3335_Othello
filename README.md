@@ -94,11 +94,10 @@ Note : On prefere garder la profondeur / nombre de plis a 4 pour accelerer le je
 A completer si l'equipe decide d'adopter des heuristiques basees sur la documentation web.
 
 
-
-
 ## Tâche 2 : Alpha Beta
 
-
+Apres avoir integre le pruning alpha beta sur le minimax, on remarque deux choses. 
+- Le style du jeu change lorsqu'on joue avec depth=4, tel que certaines branches qui auraient normalement ete choisies ne le sont pas (car le pruning les a retire). Cela s'explique 
 
 
 ## Tâche 3 : Monte-Carlo
